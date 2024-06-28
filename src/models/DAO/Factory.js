@@ -1,5 +1,5 @@
-import CAMBIARsModelMemory from "./CAMBIARsMemory.model.js";
-import CAMBIARsModelFs from "./CAMBIARs.fs.js";
+import LibrosModelMemory from "./LibrosMemory.model.js";
+import LibrosModelFs from "./Libros.fs.js";
 
 class ModelFactory{
 
@@ -7,13 +7,13 @@ class ModelFactory{
         switch (type) {
             case 'MEM':
                 console.log('Persistiendo en la memoria del servidor!')
-                return new CAMBIARsModelMemory();
+                return new LibrosModelMemory();
             case 'FS':
                 console.log('Persistiendo en la memoria de Filesystem!')
-                return new CAMBIARsModelFs();
+                return new LibrosModelFs();
             default:
                 console.log('Persistiendo en ... Default!')
-                return new CAMBIARsModelMemory();
+                return new LibrosModelMemory();
                 break;
         }
     }

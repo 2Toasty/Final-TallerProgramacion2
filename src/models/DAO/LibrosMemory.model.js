@@ -1,25 +1,112 @@
-// import Validador from "./Validador.js";
-
 class LibrosModelMemory {
     constructor() {
         this.libros = [
-            {
-              
-            },
+          { codigo: 1, titulo: "Don Quijote", autor: "Miguel de Cervantes", estado: "disponible" },
+          { codigo: 2, titulo: "Cien años de soledad", autor: "Gabriel García Márquez", estado: "alquilado" },
+          { codigo: 3, titulo: "Moby Dick", autor: "Herman Melville", estado: "no-apto" },
+          { codigo: 4, titulo: "La Odisea", autor: "Homero", estado: "disponible" }
           ];
-
-          // this.validador = new Validador();
-   
     }
 
-
-
     getLibros = async () => {
-      return this.libros;
+      const libro_estado = this.libros.map(libro => ({
+        titulo: libro.titulo,
+        estado: libro.estado
+      }))
+      return libro_estado;
     };
 
+    darCodigo = () => {
+      const codigosExistentes = this.libros.map(libro => libro.codigo);
+      let codigo = 1;
+      while (codigosExistentes.includes(codigo)) {
+          codigo++;
+      }
+      return codigo;
+  };
 
+    postLibro = async (libro) => {
+      const nuevoLibro = libro
+      nuevoLibro.codigo = this.darCodigo();
+      nuevoLibro.estado = "disponible"
+      this.libros.push(nuevoLibro)
+      return nuevoLibro
+    }
 
+    deleteLibro = async (codigo) => {
+      const index = this.libros.findIndex((l) => l.codigo === codigo)
+      if (index === -1) throw new Error("El codigo no existe")
+      const retorno = this.libros.splice(index, 1)
+    return retorno
+    }
+
+    patchAlquilarLibro = async (codigo) => {
+      const index = this.libros.findIndex((l) => l.codigo === codigo);
+      if (index === -1) throw new Error("El código no existe");
+   
+      const libro = this.libros[index];
+      let sorteo;
+    
+      if (libro.estado !== "no-apto" && libro.estado !== "alquilado") {
+
+        const response = await fetch('https://libros.deno.dev/premios');
+        sorteo = await response.json();
+          if (sorteo.premio === true) {
+            this.deleteLibro(codigo); 
+          return {
+              sorteo,
+              libro: {titulo: libro.titulo,autor: libro.autor}
+            };
+          }
+
+          libro.estado = "alquilado";
+          this.libros.splice(index, 1, libro);
+      } else {
+          return "El libro ya se encuentra alquilado o no está apto";
+        }
+  
+      return {sorteo,libro};
+    }
+  
+    patchDevolverLibro = async (codigo) => {
+      const index = this.libros.findIndex((l) => l.codigo === codigo)
+      if (index === -1) throw new Error("El codigo no existe")
+      const libro = this.libros[index]
+      if (libro.estado === "alquilado"){
+      libro.estado = "disponible"
+      this.libros.splice(index,1,libro)
+    } else {
+        return "El libro nunca fue alquilado"
+      }
+      
+      return libro
+    }
+  
+    patchNoaptearLibro = async (codigo) => {
+      const index = this.libros.findIndex((l) => l.codigo === codigo)
+      if (index === -1) throw new Error("El codigo no existe")
+      const libro = this.libros[index]
+      if (libro.estado === "alquilado" || libro.estado === "disponible"){
+      libro.estado = "no-apto"
+      this.libros.splice(index,1,libro)
+    } else {
+        return "El libro ya se encontraba en estado no apto"
+      }
+      
+      return libro
+    }
+
+    getDisponibles = async () => {
+      return this.libros.filter((l) => l.estado === "disponible")
+    }
+
+    getNoAptos = async () => {
+      return this.libros.filter((l) => l.estado === "no-apto")
+    }
+
+    getAlquilados = async () => {
+      return this.libros.filter((l) => l.estado === "alquilado")
+    }
 
   //   //agregar voto
   //   postCAMBIAR = async (voto) =>{

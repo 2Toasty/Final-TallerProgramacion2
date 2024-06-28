@@ -1,5 +1,5 @@
 const PORT = 8080;
-const PERSISTENCE = 'MEM';
+const PERSISTENCE = 'FS';
 
 //FS para filesystem
 //MEM para memoria del servidor

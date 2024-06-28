@@ -9,6 +9,14 @@ class Router {
   
     start() {
       this.router.get("/libros", this.controller.getLibros);
+      this.router.post("/libros", this.controller.postLibro);
+      this.router.delete("/libros", this.controller.deleteLibro);
+      this.router.patch("/libros/alquilar", this.controller.patchAlquilarLibro);
+      this.router.patch("/libros/devolver", this.controller.patchDevolverLibro);
+      this.router.patch("/libros/noaptear", this.controller.patchNoaptearLibro);
+      this.router.get("/libros/disponibles", this.controller.getDisponibles);
+      this.router.get("/libros/noAptos", this.controller.getNoAptos);
+      this.router.get("/libros/alquilados", this.controller.getAlquilados);
 
 
       // this.router.get("/CAMBIARs/:id", this.controller.getCAMBIARsById);
