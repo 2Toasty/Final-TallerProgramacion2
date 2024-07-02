@@ -1,8 +1,9 @@
 import express from "express";
-import Router from "./src/routes/libros.route.js";
+import Router from "./src/routes/Temperaturas.route.js";
+import config from "./config.js";
 
 const app = express();
-const PORT = 8080;
+const {PORT} = config;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

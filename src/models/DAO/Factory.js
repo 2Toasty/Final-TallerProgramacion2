@@ -1,5 +1,5 @@
-import LibrosModelMemory from "./LibrosMemory.model.js";
-import LibrosModelFs from "./Libros.fs.js";
+import TemperaturasModelMemory from "./TemperaturasMemory.model.js";
+import TemperaturasModelFs from "./Temperaturas.fs.js";
 
 class ModelFactory{
 
@@ -7,13 +7,13 @@ class ModelFactory{
         switch (type) {
             case 'MEM':
                 console.log('Persistiendo en la memoria del servidor!')
-                return new LibrosModelMemory();
+                return new TemperaturasModelMemory();
             case 'FS':
                 console.log('Persistiendo en la memoria de Filesystem!')
-                return new LibrosModelFs();
+                return new TemperaturasModelFs();
             default:
                 console.log('Persistiendo en ... Default!')
-                return new LibrosModelMemory();
+                return new TemperaturasModelMemory();
                 break;
         }
     }
